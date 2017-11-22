@@ -1,6 +1,8 @@
 use lib '../lib';
+use DB::OSQ::Logger;
 use DB::OSQ::Model::Row;
 use DB::OSQ::Model::Types;
+$DB::OSQ::Logger::debug-level = 'DEBUG';
 class A does DB::OSQ::Model::Row {
   has $!field is field = {
     type => "xyz",
@@ -8,10 +10,14 @@ class A does DB::OSQ::Model::Row {
 };
 
 class B does DB::OSQ::Model::Row {
-  has $!x is field = {};
-  has $!y is :typed is :field = {
-    length => 3
-  };
+  has $!x is field = 
+    defaults :t<string>, {
+      nullable => True,  
+    };
+  has $!y is field =
+    defaults :t<string>, {
+      length => 3,
+    };
   has $!z is field = {
     len => 6
   };
@@ -21,12 +27,14 @@ class B does DB::OSQ::Model::Row {
 my A $a .=new;
 my B $b .=new;
 
-$a.field;
-$a.field-data.perl.say;
+try $a.field;
+try $a.field-data.perl.say;
 
-$b.x;
-$b.y;
-$b.x = 25;
-say $b.x;
+try $b.x;
+try $b.y;
+try $b.y = 25;
+try say $b.y;
+try $b.y = Nil;
+try $b.x = Nil;
 
 # vim:syntax=perl6
