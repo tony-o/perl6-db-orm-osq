@@ -8,21 +8,21 @@ use DBDish::Connection;
 
 has $!db;
 has $!driver;
-has $.debug-level;
+has $.log-level;
 has $!prototype;
 has %!models;
 has $!root;
 has $!can-load = False;
 
-submethod BUILD (:$!db, :$!driver, :$!prototype = False, :$!debug-level) {
-  $DB::OSQ::Logger::debug-level = (%*ENV<production>
+submethod BUILD (:$!db, :$!driver, :$!prototype = False, :$!log-level) {
+  $DB::OSQ::Logger::log-level = (%*ENV<production>
     ?? DEBUG_LEVEL<WARN>
     !! DEBUG_LEVEL<INFO>
-  ) unless $!debug-level.defined;
+  ) unless $!log-level.defined;
 
-  $DB::OSQ::Logger::debug-level = $!debug-level
-    if $!debug-level.defined;  
-  say $DB::OSQ::Logger::debug-level;
+  $DB::OSQ::Logger::log-level = $!log-level
+    if $!log-level.defined;  
+  say $DB::OSQ::Logger::log-level;
 }
 
 multi method connect(:$driver, :%options) {

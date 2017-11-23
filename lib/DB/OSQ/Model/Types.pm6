@@ -1,4 +1,5 @@
 unit module DB::OSQ::Model::Types;
+use DB::OSQ::Utils;
 
 my %def = 
   string => %( 
@@ -11,20 +12,14 @@ my %def =
       'max-len' => sub ($value is rw, :$model?, :%opts) { $value.chars <= (%opts<length><max>//%opts<length>//10000); },
     },
   ),
+  integer => %(
+    type    => 'integer',
+    db-type => 'integer',
+    check   => {
+      'intable' => sub ($v is rw, :$model?, :%opts) { $v.=Int; },
+    },
+  ),
 ;
-sub merge(*@_) {
-  my %r;
-  for @_ -> %x {
-    for %x.keys -> $k {
-      if %x{$k} !~~ Hash {
-        %r{$k} = %x{$k};
-        next;
-      }
-      %r{$k} = merge (%r{$k}//{}), %x{$k};
-    }
-  }
-  %r;
-}
 
 sub defaults(*@_, :$t) is export {
   merge %def{$t}, |@_;
