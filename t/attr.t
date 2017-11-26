@@ -2,7 +2,7 @@ use lib '../lib';
 use DB::OSQ::Logger;
 use DB::OSQ::Model::Row;
 use DB::OSQ::Model::Types;
-$DB::OSQ::Logger::debug-level = 'DEBUG';
+$DB::OSQ::Logger::log-level = 'DEBUG';
 class A does DB::OSQ::Model::Row {
   has $!field is field = {
     type => "xyz",
