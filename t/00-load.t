@@ -1,8 +1,9 @@
-use lib '../lib';
+use lib 't/lib';
 use lib 'lib';
 use D;
+use Data::Dump;
 
-my D $db-p .=new(prototype => True, debug-level => 'DEBUG' );
+my D $db-p .=new(prototype => True, log-level => 'DEBUG' );
 $db-p.connect(
   driver => 'Pg',
   options => {
@@ -12,7 +13,7 @@ $db-p.connect(
   },
 );
 
-$db-p.model('xyz');
+say Dump $db-p.model(qw<xyz>);
 
 my $search = $db-p.model('xyz').search({ hello => 1 }, {
   columns => (qw<txt id>),

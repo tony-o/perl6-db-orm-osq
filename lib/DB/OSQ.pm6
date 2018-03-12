@@ -81,14 +81,16 @@ method model(Str $model-name, Str :$module?) {
     !! "$prefix\::Model\::$model-name";
   log-debug "Attempting to load: $model";
   try require ::("$model");
-  if ::("$model").isa(Failure) && !$!prototype {
+  if ::("$model") ~~ Failure && !$!prototype {
     log-debug $!prototype;
     log-error "Unable to load $model and protytping is off";
   } else {
     log-debug "Caching model $model-name";
-    %!models{$model-name} = DB::OSQ::Model[$model-name, True].new(:$!driver, :$!db)
-      if $!prototype && ::("$model").isa(Failure);
-    %!models{$model-name} = ::("$model").new
-      unless ::("$model").isa(Failure);
+    try {
+      %!models{$model-name} = DB::OSQ::Model[$model-name, True].new(:$!driver, :$!db)
+        if $!prototype && ::("$model") ~~ Failure;
+      %!models{$model-name} = ::("$model").new
+        unless ::("$model") ~~ Failure;
+    };
   }
 }

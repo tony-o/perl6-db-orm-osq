@@ -1,4 +1,4 @@
-use lib '../lib';
+use lib 't/lib';
 use lib 'lib';
 use D;
 use Data::Dump;
